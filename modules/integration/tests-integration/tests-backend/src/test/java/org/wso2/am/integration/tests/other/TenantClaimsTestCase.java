@@ -24,11 +24,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Factory;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import org.wso2.am.admin.clients.client.utils.AuthenticateStubUtil;
 import org.wso2.am.admin.clients.registry.ResourceAdminServiceClient;
 import org.wso2.am.integration.test.utils.APIManagerIntegrationTestException;
@@ -52,20 +48,13 @@ import org.wso2.carbon.utils.FileManipulator;
 import org.wso2.carbon.utils.ServerConstants;
 
 import javax.xml.xpath.XPathExpressionException;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.FileReader;
+import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 @SetEnvironment(executionEnvironments = {ExecutionEnvironment.STANDALONE})
 public class TenantClaimsTestCase extends APIMIntegrationBaseTest {
@@ -82,8 +71,7 @@ public class TenantClaimsTestCase extends APIMIntegrationBaseTest {
     private String storeURLHttp;
     private String newSignUPXML;
     private ResourceAdminServiceClient resourceAdminServiceClient;
-    private final String SIGNUP_XML_REG_CONFIG_LOCATION = "/_system/governance/apimgt/applicationdata/sign-up-config.xml";
-    ;
+    private final String SIGNUP_XML_REG_CONFIG_LOCATION = "/_system/governance/apimgt/applicationdata/sign-up-config.xml";;
     private final String claims = " Kim|Hill|ABC Network|USA|kim@wso2.com|0016269934122|0016269934134|kimhill|" +
             "www.abcNsounds.org|department|12-12-2000|subscriber";
 
@@ -140,9 +128,9 @@ public class TenantClaimsTestCase extends APIMIntegrationBaseTest {
             assertFalse(loginJsonObject.getBoolean("error"), "Error in Login Request: User Name : " + STORE_USERNAME);
 
         } catch (XPathExpressionException e) {
-            log.error("Error while getting store context", e);
+            log.error("Error while getting store context");
         } catch (JSONException e) {
-            log.error("Error while signing up", e);
+            log.error("Error while signing up");
         }
     }
 
@@ -155,7 +143,6 @@ public class TenantClaimsTestCase extends APIMIntegrationBaseTest {
 
     /**
      * This method replaces the signup.xml
-     *
      * @throws APIManagerIntegrationTestException - exception throws when reading the file.
      */
     public void replaceSignUpXml() throws APIManagerIntegrationTestException {
@@ -163,9 +150,9 @@ public class TenantClaimsTestCase extends APIMIntegrationBaseTest {
         try {
             resourceAdminServiceClient.updateTextContent(SIGNUP_XML_REG_CONFIG_LOCATION, newSignUPXML);
         } catch (RemoteException e) {
-            log.error("Error while updating text context", e);
+            log.error("Error while updating text context");
         } catch (ResourceAdminServiceExceptionException e) {
-            log.error("Error while getting service client", e);
+            log.error("Error while getting service client");
         }
     }
 
@@ -202,19 +189,18 @@ public class TenantClaimsTestCase extends APIMIntegrationBaseTest {
             stub.updateLocalClaim(localClaimDTO);
 
         } catch (XPathExpressionException e) {
-            log.error("Error while getting Key Manager context", e);
+            log.error("Error while getting Key Manager context");
         } catch (AxisFault axisFault) {
-            log.error("Error while getting accessing claims", axisFault);
+            log.error("Error while getting accessing claims");
         } catch (ClaimMetadataManagementServiceClaimMetadataException e) {
-            log.error("Error while updating local claim", e);
+            log.error("Error while updating local claim");
         } catch (RemoteException e) {
-            log.error("Error while connecting to stub", e);
+            log.error("Error while connecting to stub");
         }
     }
 
     /**
      * This method checks the display order of userfields
-     *
      * @throws APIManagerIntegrationTestException - exception throws when reading the file.
      */
 
@@ -283,9 +269,9 @@ public class TenantClaimsTestCase extends APIMIntegrationBaseTest {
             }
             log.info(finalOutputStore);
         } catch (XPathExpressionException e) {
-            log.error("Error while getting Tenant domain", e);
+            log.error("Error while getting Tenant domain");
         } catch (IOException e) {
-            log.error("Error while invoking test application to test publisher host object", e);
+            log.error("Error while invoking test application to test publisher host object");
         } finally {
             assertNotNull(finalOutputStore, "Result cannot be null");
         }
@@ -316,7 +302,7 @@ public class TenantClaimsTestCase extends APIMIntegrationBaseTest {
                 try {
                     bufferedReader.close();
                 } catch (IOException e) {
-                    log.error("Error when closing the buffer reader which used to reed the file:" + fileLocation +
+                    log.warn("Error when closing the buffer reade which used to reed the file:" + fileLocation +
                             ". Error:" + e.getMessage());
                 }
             }
