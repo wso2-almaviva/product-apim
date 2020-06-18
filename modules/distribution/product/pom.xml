@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.wso2.am</groupId>
         <artifactId>am-distribution-parent</artifactId>
-        <version>3.1.1-SNAPSHOT</version>
+        <version>3.2.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -129,6 +129,25 @@
                                 <artifactItem>
                                     <groupId>org.wso2.carbon.apimgt</groupId>
                                     <artifactId>org.wso2.carbon.apimgt.rest.api.store.feature</artifactId>
+                                    <version>${carbon.apimgt.version}</version>
+                                    <type>zip</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>target</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>unpack-rest-gateway</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.wso2.carbon.apimgt</groupId>
+                                    <artifactId>org.wso2.carbon.apimgt.rest.api.gateway.feature</artifactId>
                                     <version>${carbon.apimgt.version}</version>
                                     <type>zip</type>
                                     <overWrite>true</overWrite>
@@ -255,6 +274,7 @@
                                 <zip destfile="target/site/publisher-api-docs.zip" basedir="target/features/" includes="org.wso2.carbon.apimgt.rest.api.publisher*/api-docs/" />
                                 <zip destfile="target/site/store-api-docs.zip" basedir="target/features/" includes="org.wso2.carbon.apimgt.rest.api.store*/api-docs/" />
                                 <zip destfile="target/site/admin-api-docs.zip" basedir="target/features/" includes="org.wso2.carbon.apimgt.rest.api.admin*/api-docs/" />
+                                <zip destfile="target/site/gateway-api-docs.zip" basedir="target/features/" includes="org.wso2.carbon.apimgt.rest.api.gateway.v1*/api-docs/" />
                                 <delete dir="features" />
                                 <delete dir="plugins" />
                                 <delete dir="${tempdir}" />
@@ -437,9 +457,27 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
+                <version>3.3</version>
+                <configuration>
+                    <reportPlugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-project-info-reports-plugin</artifactId>
+                            <version>2.4</version>
+                            <reportSets>
+                                <reportSet>
+                                    <reports>
+                                        <report>index</report>
+                                    </reports>
+                                </reportSet>
+                            </reportSets>
+                        </plugin>
+                    </reportPlugins>
+                </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>
+                        <id>--------create-documentation-module----</id>
                         <goals>
                             <goal>site</goal>
                         </goals>
@@ -913,22 +951,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>2.4</version>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>index</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
-        </plugins>
-    </reporting>
 
 </project>
